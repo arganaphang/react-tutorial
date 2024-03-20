@@ -1,35 +1,48 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from "react";
+import "./styles/App.css";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [email, setEmail] = useState("admin@mail.com");
+  const [password, setPassword] = useState("admin123");
+  const [isLoginSuccess, setIsLoginSuccess] = useState<boolean | null>(null);
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div className="container">
+      <form
+        className="form"
+        onSubmit={(e) => {
+          e.preventDefault();
+          console.log(`email: ${email}`);
+          console.log(`password: ${password}`);
+          if (email === "admin@mail.com" && password === "admin123") {
+            setIsLoginSuccess(true);
+          } else {
+            setIsLoginSuccess(false);
+          }
+        }}
+      >
+        <input
+          type="email"
+          placeholder="johndoe@mail.com"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <input
+          type="password"
+          placeholder="********"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <button type="submit">Login</button>
+      </form>
+      {isLoginSuccess !== null && <Label isSuccess={isLoginSuccess} />}
+    </div>
+  );
 }
 
-export default App
+function Label({ isSuccess }: { isSuccess: boolean }) {
+  if (isSuccess) return <p>Login Berhasil</p>;
+  return <p>Login Gagal</p>;
+}
+
+export default App;
