@@ -1,3 +1,5 @@
+import { useTodoStore } from "@/stores/todo";
+import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import Todo from "../types/todo";
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
@@ -5,23 +7,35 @@ interface Props extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 export default function TodoItem({ todo }: Props) {
+  const toggle = useTodoStore((state) => state.toggleDone);
+
   return (
-    <div>
+    <div className="select-none flex items-center px-2 rounded hover:bg-gray-900 cursor-pointer">
       <input
         className="hidden"
         type="checkbox"
         id={`todo-item-${todo.id}`}
-        defaultChecked={todo.is_done}
+        checked={todo.is_done}
+        onChange={() => toggle(todo.id)}
       />
       <label
-        className="flex items-center h-10 px-2 rounded cursor-pointer hover:bg-gray-900"
+        className="flex-1 flex items-center h-10"
         htmlFor={`todo-item-${todo.id}`}
       >
-        <span className="flex items-center justify-center w-5 h-5 text-transparent border-2 border-gray-500 rounded-full">
-          <div className="w-4 h-4 border border-gray-700 rounded-full" />
-        </span>
+        {todo.is_done ? (
+          <CheckCircleIcon className="w-5 h-5 stroke-green-400" />
+        ) : (
+          <span className="w-5 h-5 text-transparent border-1 border-gray-500 rounded-full"></span>
+        )}
         <span className="ml-4 text-sm">{todo.title}</span>
       </label>
+      <XCircleIcon
+        className="w-5 h-5 stroke-red-400"
+        onClick={() => {
+          // TODO: Add Delete Logic
+          console.log("DELETED");
+        }}
+      />
     </div>
   );
 }
